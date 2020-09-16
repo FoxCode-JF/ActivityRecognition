@@ -7,6 +7,24 @@
     tools:context=".MainActivity">
 
     <TextView
+        android:id="@+id/gyroscopeTxtView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Gyroscope data"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearAccelerationTxtView" />
+
+    <TextView
+        android:id="@+id/magnetometerTxtView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Magnetometer Data"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/gyroscopeTxtView" />
+
+    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Hello World!"
@@ -14,5 +32,23 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/accelTxtView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Accelerometer data"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/linearAccelerationTxtView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Linear acceleration data"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/accelTxtView" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

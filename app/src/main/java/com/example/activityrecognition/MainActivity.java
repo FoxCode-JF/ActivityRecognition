@@ -14,6 +14,7 @@ public class MainActivity extends AppCompatActivity {
     TextView linearAccelTxtView;
     TextView magnetometerTxtView;
     TextView gyroscopeTxtView;
+    ModelLoader modelLoader;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,6 +27,7 @@ public class MainActivity extends AppCompatActivity {
         gyroscopeTxtView = findViewById(R.id.gyroscopeTxtView);
 
         sensorData = new SensorData((SensorManager)getSystemService(SENSOR_SERVICE), this);
+        modelLoader = new ModelLoader();
     }
 
     @Override

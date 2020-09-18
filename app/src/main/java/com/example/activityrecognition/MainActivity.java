@@ -6,10 +6,12 @@ import android.Manifest;
 import android.content.pm.PackageManager;
 import android.hardware.SensorManager;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.StrictMode;
 import android.util.Base64;
 import android.widget.TextView;
 
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -46,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
     ModelLoader modelLoader;
     int MY_PERMISSIONS_READ_EXTERNAL_STORAGE = 12;
     double[] dataInput = new double[12];
-
+    String prev = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,6 +82,17 @@ public class MainActivity extends AppCompatActivity {
         }
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
+        final Handler handler = new Handler();
+        Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+
+                predictions();
+                handler.postDelayed(this, 1000);
+            }
+        };
+
+        handler.postDelayed(runnable, 1000);
 
     }
 
@@ -102,29 +115,47 @@ public class MainActivity extends AppCompatActivity {
         dataInput[9] = sensorData.getMagnetometerValues().getX();
         dataInput[10] = sensorData.getMagnetometerValues().getY();
         dataInput[11] = sensorData.getMagnetometerValues().getZ();
-        RequestQueue MyRequestQueue = Volley.newRequestQueue(this);
+        final RequestQueue MyRequestQueue = Volley.newRequestQueue(this);
         String url = "http://andreasvf.com/action_page.php";
         final String input = modelLoader.predict(dataInput);
-        StringRequest MyStringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                //This code is executed if the server responds, whether or not the response contains data.
-                //The String 'response' contains the server's response.
+
+        if(!prev.equals(input)){
+            StringRequest MyStringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
+                @Override
+                public void onResponse(String response) {
+                    System.out.println(response.length());
+                }
+            }, new Response.ErrorListener() { //Create an error listener to handle errors appropriately.
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    System.out.println(error);
+                }
+            }) {
+                protected Map<String, String> getParams() {
+                    Map<String, String> MyData = new HashMap<String, String>();
+                    MyData.put("activity", input); //Add the data you'd like to send to the server.
+                    return MyData;
+                }
+            };
+            activityTxtView.setText(input);
+
+            if(MyRequestQueue.getSequenceNumber() > 1){
+                MyRequestQueue.cancelAll(MyStringRequest);
             }
-        }, new Response.ErrorListener() { //Create an error listener to handle errors appropriately.
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                //This code is executed if there is an error.
-            }
-        }) {
-            protected Map<String, String> getParams() {
-                Map<String, String> MyData = new HashMap<String, String>();
-                MyData.put("activity", input); //Add the data you'd like to send to the server.
-                return MyData;
-            }
-        };
-        activityTxtView.setText(input);
-        MyRequestQueue.add(MyStringRequest);
+
+
+            MyStringRequest.setRetryPolicy(new DefaultRetryPolicy(
+                    6000,
+                    DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                    DefaultRetryPolicy.DEFAULT_BACKOFF_MULT)
+            );
+
+
+            MyRequestQueue.add(MyStringRequest);
+            prev = input;
+
+        }
+
     }
 
 

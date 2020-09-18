@@ -64,7 +64,7 @@ public class ModelLoader {
 
     public void loadModel() {
         try{
-            this.mClassifier = (Classifier) weka.core.SerializationHelper.read("/storage/emulated/0/bluetooth/test1.model");
+            this.mClassifier = (Classifier) weka.core.SerializationHelper.read("/storage/emulated/0/bluetooth/Model right pocket.model");
 
         } catch (Exception e){
             e.printStackTrace();

@@ -54,14 +54,6 @@ public class SensorData implements SensorEventListener {
             this.magnetometerValues.setValues(event.values.clone());
             mainActivity.magnetometerTxtView.setText("Magnetometer: X: " + this.magnetometerValues.getX());
         }
-
-        Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                mainActivity.predictions();
-            }
-        }, 2000);
     }
 
     @Override

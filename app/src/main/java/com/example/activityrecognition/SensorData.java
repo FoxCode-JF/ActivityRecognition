@@ -5,6 +5,7 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.os.Handler;
 
 
 public class SensorData implements SensorEventListener {
@@ -53,6 +54,14 @@ public class SensorData implements SensorEventListener {
             this.magnetometerValues.setValues(event.values.clone());
             mainActivity.magnetometerTxtView.setText("Magnetometer: X: " + this.magnetometerValues.getX());
         }
+
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                mainActivity.predictions();
+            }
+        }, 2000);
     }
 
     @Override

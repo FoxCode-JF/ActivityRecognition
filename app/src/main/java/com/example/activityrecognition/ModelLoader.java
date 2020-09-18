@@ -1,8 +1,10 @@
 package com.example.activityrecognition;
 
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.text.AttributedCharacterIterator;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
@@ -60,33 +62,34 @@ public class ModelLoader {
 
     }
 
-    public void loadModel(){
+    public void loadModel() {
         try{
-            this.mClassifier = (Classifier) weka.core.SerializationHelper.read("");
+            this.mClassifier = (Classifier) weka.core.SerializationHelper.read("/storage/emulated/0/bluetooth/test1.model");
+
         } catch (Exception e){
             e.printStackTrace();
         }
     }
-    public String predict(){
-        if(mClassifier == null) {
+
+    public String predict(final double[] input) {
+        if(this.mClassifier == null) {
             loadModel();
         }
-
         dataUnpredicted.setClassIndex(dataUnpredicted.numAttributes()-1);
         DenseInstance testInstance = new DenseInstance(dataUnpredicted.numAttributes()){
             {
-                setValue(attributeAx, 0);
-                setValue(attributeAy, 0);
-                setValue(attributeAz, 0);
-                setValue(attributeGx, 0);
-                setValue(attributeGy, 0);
-                setValue(attributeGz, 0);
-                setValue(attributeLx, 0);
-                setValue(attributeLy, 0);
-                setValue(attributeLz, 0);
-                setValue(attributeMx, 0);
-                setValue(attributeMy, 0);
-                setValue(attributeMz, 0);
+                setValue(attributeAx, input[0]);
+                setValue(attributeAy, input[1]);
+                setValue(attributeAz, input[2]);
+                setValue(attributeGx, input[3]);
+                setValue(attributeGy, input[4]);
+                setValue(attributeGz, input[5]);
+                setValue(attributeLx, input[6]);
+                setValue(attributeLy, input[7]);
+                setValue(attributeLz, input[8]);
+                setValue(attributeMx, input[9]);
+                setValue(attributeMy, input[10]);
+                setValue(attributeMz, input[11]);
             }
         };
 
@@ -95,15 +98,10 @@ public class ModelLoader {
         String output = "";
         try{
             double result = mClassifier.classifyInstance(testInstance);
-            output = "Index: " + result + "\nClass:" + classes.get(Double.valueOf(result).intValue());
-            System.out.println(output);
+            output = classes.get(Double.valueOf(result).intValue());
         }catch (Exception e){
             e.printStackTrace();
         }
-
-
-
-
         return output;
     }
 }

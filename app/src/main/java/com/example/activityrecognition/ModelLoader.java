@@ -78,18 +78,18 @@ public class ModelLoader {
         dataUnpredicted.setClassIndex(dataUnpredicted.numAttributes()-1);
         DenseInstance testInstance = new DenseInstance(dataUnpredicted.numAttributes()){
             {
-                setValue(attributeAx, input[0]);
-                setValue(attributeAy, input[1]);
-                setValue(attributeAz, input[2]);
-                setValue(attributeGx, input[3]);
-                setValue(attributeGy, input[4]);
-                setValue(attributeGz, input[5]);
-                setValue(attributeLx, input[6]);
-                setValue(attributeLy, input[7]);
-                setValue(attributeLz, input[8]);
-                setValue(attributeMx, input[9]);
-                setValue(attributeMy, input[10]);
-                setValue(attributeMz, input[11]);
+                setValue(attributeAx, standardize(input[0], 1.191, 4.143));
+                setValue(attributeAy, standardize(input[1], -7.598, 5.479));
+                setValue(attributeAz, standardize(input[2], -2.813, 4.198));
+                setValue(attributeGx, standardize(input[3], 0, 1.406));
+                setValue(attributeGy, standardize(input[4], 0.045, 1.254));
+                setValue(attributeGz, standardize(input[5], -0.025, 0.962));
+                setValue(attributeLx, standardize(input[6], 0.048, 2.927));
+                setValue(attributeLy, standardize(input[7], -0.248, 4.081));
+                setValue(attributeLz, standardize(input[8], 0.059, 2.896);
+                setValue(attributeMx, standardize(input[9], -6.32, 21.482));
+                setValue(attributeMy, standardize(input[20], 30.169, 19.561));
+                setValue(attributeMz, standardize(input[11], 6.811, 20.643));
             }
         };
 
@@ -103,5 +103,9 @@ public class ModelLoader {
             e.printStackTrace();
         }
         return output;
+    }
+    private double standardize(double dataPoint, double mean, double stdDev)
+    {
+        return (dataPoint - mean) / stdDev;
     }
 }
